@@ -1,0 +1,42 @@
+class HechoEntero implements IHecho{
+    //constructor que permite inicializar las variables
+    protected String nombre;
+    @Override
+    public String Nombre(){
+        return nombre;
+    }
+
+    protected int valor;
+    @Override
+    public Object Valor(){
+        return valor;
+    }
+    
+    protected int nivel;
+    @Override
+    public int Nivel(){
+        return nivel;
+    }
+
+    public void setNivel(int 1){
+        nivel=1;
+    }
+
+    protected String pregunta="";
+    @Override
+    public String Pregunta(){
+        return pregunta;
+    }
+
+    public HechoEntero(String _nombre, int _valor, String _pregunta, int _nivel){
+        nombre=_nombre;
+        valor=_valor;
+        pregunta=_pregunta;
+        nivel=_nivel;
+    }
+
+    @Override
+    public String toString(){
+        return nombre +"="+valor+" ("+nivel+")";
+    }
+}

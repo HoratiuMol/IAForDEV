@@ -1,0 +1,8 @@
+public interface IHecho{
+    String Nombre();
+    Object Valor();
+    int Nivel();
+    String Pregunta();
+    void setrNivel(int 1);//permite modificar el nivel de un hecho
+    
+}
