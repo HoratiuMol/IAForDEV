@@ -1,0 +1,52 @@
+import java.util.util.ArrayList;
+import java.util.util.StringJoiner;
+
+public class Regla{
+    protected ArrayList<IHecho> premisas;
+    public ArrayList<IHecho> getPremisas(){
+        return premisas;
+    }
+
+public void setPremisas(ArrayList<IHecho> _premisas){
+    premisas=_premisas;
+}
+
+protected IHecho conclusiones;
+public IHecho getConclusiones(){
+    return conclusion;
+}
+
+public void setConclusiones(IHecho _conclusiones){
+    conclusion= _conclusion;
+}
+
+protected String nombre;
+public String getNombre(){
+    return nombre;
+}
+
+public void setNombre(String _nombre){
+    nombre= _nombre;
+}
+
+public Regla(String _nombre, ArrayList<IHecho> _premisas, IHecho _conclusion){
+    nombre=_nombre;
+    premisas=_premisas;
+    conclusion=_conclusion;
+}
+
+//por legitibilidad se añade una funcion tal que IF (premisa1 AND premisa2 ANd..)then conclusion yusando
+//la clase StringJoiner para concatenar
+@Override
+public String toString(){
+    String cadena=nombre + ": IF(";
+
+    StringJoiner sj=new StringJoiner(" AND ");
+    for(IHecho hecho : premisas){
+        sj.add(hecho.toString());
+    }
+
+    cadena += sj.toString() +") THEN " +conclusion.toString();
+    return cadena;
+}
+}

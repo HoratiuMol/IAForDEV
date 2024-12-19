@@ -1,0 +1,31 @@
+import java.util.ArrayList;
+
+class BaseDeReglas{
+    protected ArrayList<Regla> reglas;
+    public ArrayList<Regla> getReglas(){
+        return reglas;
+    }
+
+public void setReglas(ArrayList<Regla> _reglas){
+    //se copoian  reglas y se agreagan
+    for(Regla r: _reglas){
+        Regla copia=new Regla(r.nombre, r.premisas, r.conclusion);
+        reglas.add(copia);
+    }
+}
+public BaseDeReglas(){
+    reglas=new ArrayList();
+}
+//metodos para arreglas y elminar reglas
+
+public void ClearBase(){
+    reglas.clear(),
+}
+public void AgreagarRegla(Regla r){
+    reglas.add(r);
+}
+public void Eliminar(Regla r){
+    reglas.remove(r);
+}
+
+}
