@@ -1,0 +1,74 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Aplicacion implements IHM{
+    public static void main(String[] args){
+        //a completar mas tarde
+    }
+
+    //solicita un valor entero al usuario
+    @Override
+    public int PedirValorEntero(String pregunta){
+        System.out.println(pregunta);
+        try{
+            BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+            return Integer.decode(br.readLine());
+        }
+        catch (Exzception e){
+            return 0;
+        }
+    }
+    //solicita un valor booleano, con si (verdadero) o no
+    //los errores se ignora(devuelve falso)
+    @Override
+    public boolean PedirValorBooleano(String pregunta){
+        try{
+            System.out.println(pregunta +"(si,no)");
+            BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+            String res=br.readLine();
+            if(res.equals("yes")){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        catch (IOException e){
+            return false;
+        }
+    }
+
+    @Override
+    public void MostrarHechos(ArrayList<IHecho> hechos){
+        String res="Solution(es) encontrada(s) : \n";
+        Collections.sort(hechos, (IHecho f1, IHecho f2)->{
+            if(f1.Nivel()==f2.Nivel()){
+                return 0;
+            }
+            else if(f1.Nivel() > f2.Nivel()){
+                return -1;
+            }
+            else{
+                return 1;
+            }
+        });
+        for(IHecho h: hechos){
+            if(h.Nivel()!=0){
+                res +=h.toString()+"\n";
+            }
+        }
+        System.out.println(res);
+    }
+
+    @Override
+    public void MostrarReglas(ArrayList<Regla> reglas){
+        String res="";
+        for(Regla r: reglas){
+            res +=r.toString()+"\n";
+        }
+        System.out.println(res);
+    }//a completar mas adelante
+}
