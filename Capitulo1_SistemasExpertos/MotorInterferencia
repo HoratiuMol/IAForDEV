@@ -1,6 +1,7 @@
 //contiene una base dfe hechos, una de reglas y una de interfaz
 import java.util.ArrayList;
 
+//nucelo del motor de inferencia, aqui se escogen las reglas y se aplican y se ejecutan las interacciones con el suario
 public class MotorInterferencia{
     private BaseDeHechos bdh;
     private BaseDeReglas bdr;
