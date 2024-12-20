@@ -1,0 +1,93 @@
+//contiene una base dfe hechos, una de reglas y una de interfaz
+import java.util.ArrayList;
+
+public class MotorInterferencia{
+    private BaseDeHechos bdh;
+    private BaseDeReglas bdr;
+    private IHM ihm;
+
+    private int nivelMaxRegla;
+
+    public MotorInterferencia(IHM _ihm){
+        ihm=_ihm;
+        bdh=new BaseDeHechos;
+        btd= new BaseDeReglas;
+    }
+
+    //mediante las siguietnes metodos se piden los valores booleanos o enteros de los hechos
+    int PedirValorEntero(String pregunta){
+        return ihm.PedirValorEntero(pregunta);
+    }
+    boolean PedirValorBooleano(String pregunta){
+        return ihm.PedirValorBooleano(pregunta);
+    }
+
+    //creamos regla para saber si es aplicable o no
+    //caso1 el hecho no está presente en la base de hechos y hay que consultar el valor al usuario y agreagarlo a la base de hechos
+    //caso2 hecho existe o su valor se corresponde con alguno ya existente.
+    //si la regla se aplica, el hecho inferido tendrácomo nivel de las premisas +1, reglas con premisas de 0 y 3 creará un hecho de nivel 4
+    //si la regla no se puede aplciar en lugar de devolver un +1 devovlemos un -1
+    int EsAplicable(Regla _r){
+        int nivelMax=-1;
+        //comprobamos la veracidad de cada premisa
+        for(IHecho h:_r.getPremisas()){
+            IHecho hechoEcontrado=bdh.Buscar(h.Nombre());
+            if(hechoEcontrado==null){
+                //este hecho no existe en la base de hechos
+                if(h.Pregunta()!=null){
+                    //se pregunta y se agreag
+                    hechoEcontrado=HechoFactory.Hecho(h, this);
+                    bdh.AgregarHecho(hechoEcontrado);
+                }else{
+                    //la regla no puede aplciarse
+                    return -1;
+                }
+            }
+            //el hecho existe en la base de hechos(antes creado)
+            //pero con el valor correcto?
+            if(!hechoEcontrado.Valor().equals(h.Valor())){
+                //no corresponde
+                return -1;
+            }else{
+                //se correspodne y se actualiza el nivel
+                nivelMax=Math.max(nivelMax, hechoEcontrado.Nivel())
+            }
+    }
+    return nivelMax;
+
+}
+
+Regla EncontrarRegla(BaseDeReglas bdrLocal){
+    for(Regla r:bdrLocal.getReglas()){
+        int nivel=EsAplicable(r);
+        if(nivel!=-1){
+            nivelMaxRegla=nivel;
+            return r;
+        }
+    }
+    return null;
+}
+public void Resolver(){
+    //se copian todas las reglas
+    BaseDeReglas bdrLocal=new BaseDeReglas();
+    bdrLocal.setReglas(bdr.getReglas());
+
+    //se vacia la base de hechos
+    bdh.Vaciar();
+
+    //mientras existen reglas para aplicar
+    Regla r=EncontrarRegla(bdrLocal);
+    while(r!=null){
+        //aplciarregla
+        IHecho nuevoHecho=r.conclusion;
+        nuevoHecho.setNivel(nivelMaxRegla +1);
+        bdh.AgregarHecho(nuevoHecho);
+        //elimina la regla de las reglas aplicables
+        bdrLocal.Eliminar(r);
+        //buscar la siguiente regla aplicable
+        r=EncontrarRegla(bdrLocal);
+    }
+    //mostrar los resultado
+    ihm.MostrarHechos(bdr.getHechos());
+}
+}

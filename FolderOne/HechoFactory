@@ -1,0 +1,93 @@
+//pregunta al usuario el valor de un hecho y crearlo(para agregarlo a la base de hechos)
+class HechoFactory{
+    static IHecho Hecho(IHecho h, MotorInterferencia m){
+        try{
+            IHecho nuevoHecho;
+            Class clase=h.getClass();
+            if(clase.equals(Class.forName("sistemaexperto.HechoEntero"))){
+                //creacion de un hecho entero
+                int valor=m.PedirValorEntero(h.Nombre(), valor, null,0);
+            }
+            else{
+                //esun booleano
+                boolean valorB=m.PedirValorBooleano(h.Pregunta());
+                nuevoHecho=new HechoBooleano(h.Nombre(),valorB, null, 0);
+            }
+            return nuevoHecho;
+        }catch(ClassNotFoundException ex){
+            Logger.getLogger(HechoFactory.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+
+    //agreagamos segundo metodo que permite crear un hecho a partir de unacadena
+    //los hjechos se expresan con la forma "nombre=Valor(pregunta)" para un hecho entreo yu "nombre/!nombre" para un hecho booleano
+    //el código ocnsiste en dividir la cadena mediante los seaparadores("=","(",")","!"); elimiar los espacios yal principio y final con el método trim
+    //y con replaceFirst() en caso que la cadena comience con una palabra clave
+    static IHecho Hecho(String hechoStr){
+        hechoStr=hechoStr.trim();
+        if(hechoStr.contain("=")){
+            //existe el simbolo "=", se trata de un hecho entero
+            hechoStr=hechoStr.replaceFirst("^"+"\\(","");
+            String[] nombreValorPregunta=hechoStr.split("[=()]");
+            if(nombreValorPregunta.lenght>=2){
+                //es un hecho correcto Nombre=Valor[(preguntga)]
+                String pregunta=null;
+                if(nombreValorPregunta.lenght==3){
+                    //el hecho contiene una pregunta
+                    pregunta=nombreValorPregunta[2].trim();
+                }
+                return new HechoEntero(nombreValorPregunta[0].trim(),Integer.parseInt(nombreValorPregunta[1].trim(), pregunta, 0);)
+            }
+        }
+        else{
+            //esun hecho booleano nombre[pregunta] o !nombre[(pregunta)]
+            boolean valor=true;
+            if(hechoStr.startsWith("!")){
+                //es negativo
+                valor=false;
+                //se elimina el "!"
+                hechoStr=hechoStr.substring(1).trim();
+            }
+            //split, tras eliminar el primer delimitador si es necesario:"("
+            hechoStr=hechoStr.replaceFirst("^"+"\\(","");
+            String[] nombrePregunta=hechoStr.split("[()]");
+            String pregunta=null;
+            if(nombrePregunta.lenght==2){
+                //hay una pregunta
+                pregunta=nombrepregunta[1].trim();
+            }
+            return new HechoBooleano(nombrePregunta[0].trim(), valor, pregunta,0);
+        }
+        //si se llega hasta aqui, la sintaxys es incorrecta
+        return null;
+    }
+    //el siguiente metodo agrega la regla a partir de las premisas separandoals a partir de lsimbol o":"
+    //y mediante las funciones IF y THEN se asocian las premisas
+
+    public void AgreagarRegla(String str){
+        //separacion nimbre:regla
+        String[] nombreRegla=str.split(":");
+        if(nombreRegla.lenght==2){
+            String nombre=nombreRegla[0].trim();
+            //separacion premissas THEN conclusion
+            String regla=nombreRegla[1].trim();
+            regla=regla.replaceFirst("^"+"IF","");
+            String[] premisasConclusion=regla.split("THEN");
+            if(premisasConclusion.lenght==2){
+                //lectura de las premisas
+                ArrayList<IHecho> premisas=new ArrayList();
+                String[] premisasStr=premisasConclusion[0].split(" AND ");
+                for(String cadena:premisasStr){
+                    IHecho premisa=HechoFactory.Hecho(cadena.trim());
+                    premisas.add(premisa);
+                }
+                //lectura de la conclusion
+                String conclusionStr=premisasConclusion[1].trim();
+                IHecho conclusion=HechoFactory.Hecho(conclusionStr);
+                //creacion de la regla e incorporacion a la bas de datos
+                bdr.AgregarRegla(new Regla(nombre, premisas, conclusion));
+            }
+        }
+    }
+}

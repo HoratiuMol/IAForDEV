@@ -21,7 +21,7 @@ public BaseDeReglas(){
 public void ClearBase(){
     reglas.clear(),
 }
-public void AgreagarRegla(Regla r){
+public void AgregarRegla(Regla r){
     reglas.add(r);
 }
 public void Eliminar(Regla r){

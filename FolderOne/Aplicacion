@@ -4,6 +4,41 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 
+public static void main(String[] args){
+    Aplicacion app=new Aplicacion();
+    app.Run();
+}
+
+//metodo run crea nuevo motor
+//agrega las reglas mediante su version textual, solo se agregan las reglas correspondientes a los triangulos y cuadrilateros
+//ejecuta la resolucion de problemas
+public void Run(){
+    //creacion del motor
+    System.out.println("**Creación del motor **");
+    MotorInterferencia m=new MotorInterferencia(this);
+
+    //agreagar las reglas
+    System.out.println("**Agreagar las reglas**");
+    m.AgreagarRegla("R1 : IF(Orden=3(¿Cuál es el orden?)) THEN Triángulo");
+    m.AgreagarRegla("R2 : IF(Triángulo AND Ángulo Recto(¿La Figura tiene al menos un ángulo recto?)) THEN Triángulo Rectángulo");
+    m.AgreagarRegla("R3 : IF(Triángulo AND Lados Iguales(¿Cuántos lados iguales tiene la figura?)) THEN Triángulo Isósceles");
+    m.AgreagarRegla("R4 : IF(Triángulo rectángulo AND Triángulo Isósceles) THEN Triángulo Rectángulo Isósceles");
+    m.AgreagarRegla("R5 : IF(Triángulo AND Lados Iguales=3(¿Cuántos lados iguales tiene la figura?)) 
+    THEN Triángulo Equilátero");
+    m.AgreagarRegla("R6 : IF(Orden=4(¿Cuál es el orden?)) THEN Cuadrilátero");
+    m.AgreagarRegla("R7 : IF(Cuadrilátero AND Lados paralelos=2(¿Cuántos Lados paralelos entre si - 0, 2 o 4?)) THEN Trapecio");
+    m.AgreagarRegla("R8 : IF(Cuadrilátero AND Lados paralelos=4(¿Cuántos Lados paralelos entre si - 0, 2 o 4?)) THEN Paralelogramo");
+    m.AgreagarRegla("R9 : IF(Paralelogramo AND Ángulo Recto(¿La figura tiene al menos un ángulo recto?)) THEN Rectángulo");
+    m.AgreagarRegla("R10 : IF(Paralelogramo AND Lados Iguales=4(¿Cuántos lados iguales tiene la figura?)) THEN Rombo");
+    m.AgreagarRegla("R11 : IF(Triángulo AND Rombo THEN Cuadrado");
+
+    //resolucion
+    whilte(true){
+        System.out.println("\n** Resolucion **");
+        m.Resolver();
+    }
+}
+
 public class Aplicacion implements IHM{
     public static void main(String[] args){
         //a completar mas tarde
