@@ -1,0 +1,54 @@
+//la clase mas importante tanto a nivel de código como a nivel  de funcinoalidad
+//pues es la que comtrola el sistema difuso
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.StringJoiner;
+
+public class ConjuntoDifuso{
+    protected ArrayList<Punto2D> puntos;
+    protected double min;
+    protected double max;
+
+    //constructor
+    public ConjuntoDifuso(double _min, double _max){
+        puntos = new ArrayList();
+        min = _min;
+        max= _max;
+    }
+    //agregar un punto
+    public void Agregar(Punto2D pt){
+        puntos.add(pt);
+        Collections.sort(puntos);
+    }
+
+    public void Agregar(double x, double y){
+        Punto2D pt=new Punto2D(x,y);
+        Agregar(pt);
+    }
+    //metodo toString quemuestra el intervalo de valores y los distintos puntos registrados en el sisteam
+    @Override
+    public String toString(){
+        StringJoiner sj=new StringJoiner(" ");
+        sj.add("["+min+"-"+max+"]:");
+        for( Punto2D pt:puntos){
+            sj.add(pt.toString());
+        }
+        return sj.toString();
+    }
+
+    //operador de comparacion(/comapracion de cadenas)
+    @Override
+    public boolean equals(Object pt2){
+        return toString().equals(((Punto2D)pt2).toString());
+    }
+    //operador de multiplicacion
+    public ConjuntoDifuso MultiplicarPor(double valor){
+        ConjuntoDifuso conjunto=new ConjuntoDifuso(min,max);
+        for(Punto2D pt:puntos){
+            conjunto.Agregar(pt.x,pt.y*valor);
+        }
+        return conjunto;
+    }
+    
+}

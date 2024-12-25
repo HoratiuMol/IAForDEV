@@ -1,0 +1,24 @@
+//clase que nos permite definir las coordenadas en un mapa 2D
+public class Punto2D implements Comparable{
+    //coordenadas
+    public double x;
+    public double y;
+
+    //constructoir
+    public Punto2D(double _x, double _y){
+        x=_x;
+        y=_y:
+    }
+
+    @Override
+    //permite comparar, sabiendo si el punto que se pasa como parámetro es mas poequeuño, igual ogrande
+    en relación ocn el objeto en curso
+    public int compareTo(Object t){
+        return (int) (x-((Punto2D) t).x);
+    }
+
+    @Override
+    public String toString(){
+        return "("+x+";"+y+y")";
+    }
+}
