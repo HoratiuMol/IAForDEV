@@ -50,5 +50,45 @@ public class ConjuntoDifuso{
         }
         return conjunto;
     }
-    
+    //codificamos el operador NOT
+    public ConjuntoDifuso No(){
+        ConjuntoDifuso conjunto=new ConjuntoDifuso(min,max);
+        for(Punto2D pt: puntos){
+            conjunto.Agregar(pt.x,1-pt.y);
+        }
+        return conjunto;
+    }
+    /*para el siguietne metdoo debemos complciarlo mas ya que tenemos que determinar un GRADO DE PERTENENCIA
+    , necesario para la fuzzificación.
+    Tres Casos
+        1.Valor fuera del intervalo: grado pertenencia nulo
+        2.existe un valor para este pnto dentro del conjunto difuso: devolvemos el grado registrado
+        3. no hay definido ningun punto para este valor, interpolamos el grado de pertenencia. Necesitamos
+            el punto inmediatamente anterior y el punto inmediatamente posterior
+    */
+   //calculamos el grado de pertenencia de un punto
+   public double ValorDePertenencia(double valor){
+    //vaso1: al exterior del intervalo del conjunto difuso
+    if(valor < min || valor || max || puntos.size()<2){
+        return 0;
+    } 
+    Punto2D ptAntes= puntos.get(0);
+    Punto2D ptDespues=puntos.get(1);
+    int index=0;
+    while(valor>=ptDespues.x){
+        index++;
+        ptAntes=ptDespues;
+        ptDespues=puntos.get(index);
+    }
+    if (ptAntes.x==valor){
+        //tenemos un punto para este valor
+        return ptAntes.y;
+    }
+    else{
+        //se aplica la interpolacion
+        return ((ptAntes.y-ptDespues.y)*(ptDespues.x-valor)/(ptDespues.x-ptAntes.x)+ptDespues.y);
+    }
+   }
+   //los metodos de arriba permiten calcular la intersección y la unión de los conjuntos difusos, los operadores AND (&) y OR(||),
+   //siendo operadores de Zadeh
 }
