@@ -91,4 +91,153 @@ public class ConjuntoDifuso{
    }
    //los metodos de arriba permiten calcular la intersección y la unión de los conjuntos difusos, los operadores AND (&) y OR(||),
    //siendo operadores de Zadeh
+
+   //metodo min max
+   //funcion generica FUSIONAR que permite fusionar dos conjuntos gracias a un método óptimo cyu nombre es el parametro
+   private static double Optimo(double valor1, double valor2, String metodo){
+    if(metodo.equals("min")){
+        return Math.min(valor1, valor2);
+    }
+    else{
+        return Math.max(valor1, valor2)
+    }
+   }
+
+   //metodo generico 
+   private static ConjuntoDifuso Fusionar(ConjuntoDifuso c1, ConjuntoDifuso c2, String metodo){
+    //código tras primero diseñr los peradores Y/O
+    //se crea el resultado
+    ConjuntoDifuso resultado=new ConjuntoDifuso(Math.min(c1.min,c2.min), Math.max(c1.max,c2.max));
+
+    //se van a recorrer las listas mediante los iteradores
+    Iterator<Punto2D> iterador1=c1.puntos.iterador();
+    Punto2D ptConjunto1=iterador1.next();
+    Punto2D antiguoPtConjunto1=ptConjunto1;
+    Iterator<Punto2D> iterador2=c2.puntos.iterador();
+    Punto2D ptConjunto2=iterador2.next();
+
+    //Se calcula la posicion relativa de las dos curvas
+    int antiguaPosicionRelativa;
+    int nuevaPosicionRelativa=(int)
+math.signum(ptConjunto1.y - ptConjunto2.y);
+
+    boolean lista1terminada=false;
+    boolean lista2terminada=false;
+    //bucle sobre todos los puntos de ambas collecciones
+    while(!lista1terminada && !lisita2terminada){
+        //se recuperan las abcisas de los puntos en cursoo
+        double x1=ptConjunto1.x;
+        double x2=ptConjunto2.x;
+
+        //calculo de las posiciones relativas
+        antiguaPosicionRelativa=nuevaPosicionRelativa;
+        nuevaPosicionRelativa=(int)
+Math.signum(ptConjunto1.y-ptConjunto2.y);
+    /*las curvas están invertidas=?
+    si no, se tiene un solo punto 
+    a tener en cuenta?
+    */
+   if(antiguaPosicionRelativa != nuevaPosicionRelativa && antiguaPosicionRelativa != && nuevaPosicionRelativa !=0){
+    //se debe calcular el punto de interseccion
+    double x=(x1 ==x2 ? antiguoPtConjunto1.x : math.min(x1,x2));
+    double xPrima=Math.max(x1,x2);
+
+    //calculo de las pendientes
+    double p1=c1.ValorDePertenencia(xPrima)-c1.ValorDePertenencia(x)/(xPrima-x);
+    double p2=c2.ValorDePertenencia(xPrima)-x2.ValorDePertenencia(x)/(xPrima-x);
+    //calculo de la delta
+    double delta=0;
+    if((p2-p1) !=0){
+        delta=(c2.ValorDePertenencia(x)-c1.ValorDePertenencia(x))/(p1-p2);
+    }
+
+    //se agrega un punto de interseccióni al resultado
+    resultado.Agregar(x+delta,c1.ValorDePertenencia(x+delta));
+
+    //se pasa al punto siguiente
+    if(x1<x2){
+        antiguoPtConjunto1=ptConjunto1;
+        if(iterador1.hasNext()){
+            ptConjunto1=iterador1.next();
+        }else{
+            lista1terminada=true;
+            ptConjunto1=null;
+        }
+    }else if(x1>x2){
+        if(iterador2.hasNext()){
+            ptConjunto2=iterador2.next();
+        }else{
+            ptConjunto2=null;
+            lista2terminada=true;
+        }
+    }else if(x1==x2){
+        //dos puntos en la misma abscisa
+        //agrupamos el bueno, el malo no
+        resultado.Agregar(x1, Optimo(ptConjunto1.y,ptConjunto2.y, metodo));
+
+        //se pasa al siguiente punto
+        if(iterador1.hasNext()){
+            antiguoPtConjunto1=ptConjunto1;
+            ptConjunto1=iterador1.next();
+        }else{
+            ptConjunto1=null;
+            lista1terminada=true;
+        }if(iterador2.hasNext()){
+            ptConjunto2=iterador2.next();
+        }else{
+            ptConjunto2=null;
+            lista2terminada=true;
+        }
+    }else if(x1<x2){
+        //la curva c1 tiene un punto antes
+        //se calcula el grado para el segundo
+        //y se guarda el bueno
+        resultado.Agregar(x1,Optimo(ptConjunto1.y, c2.ValorDePertenencia(x1), metodo));
+        //se desplaza
+        if(iterador1.hasNext()){
+            antiguoPtConjunto1=ptConjunto1;
+            ptConjunto1=iterador1.next();
+        }else{
+            ptConjunto1=null;
+            lista1terminada=true;
+        }
+    }else{
+        //ultimo caso, la cruva c2 tiene un punto antes
+        //se calcula el grado para el priomero y se guarda el bueno
+        resultado.Agregar(x2, optimo(c1.ValorDePertenencia(x2), ptConjunto2.y, metodo));
+        //se desplaza
+        if(iterador2.hasNext()){
+            ptConjunto2=iterador2.next();
+        }else{
+            ptConjunto2=null;
+            lista2terminada=true;
+        }
+    }
+   }
+   //aqui se ha terminado una de las listas
+   //se agreagan los puntos restantes
+   if(!lista1terminada){
+    while(iterador1.hasNext()){
+        ptConjunto1=iterador1.next();
+        resultado.Agregar(ptConjunto1.x, Optimo(ptConjunto1.y,o,metodo));
+    }
+   }else if(!lista2terminada){
+    while(iterador2.hasNext()){
+        ptConjunto2=iterador2.next();
+        resultado.Agregar(ptConjunto2.x, Optimo(ptConjunto2.y, 0 ,metodo));
+    }
+   }
+   return resultado;
+    }
+   }
+
+   //OPERADOR Y
+   public ConjuntoDifuso Y(ConjuntoDifuso c2){
+    return Fusionar(this,c2,"Min");
+   }
+
+   //OPERADOR O
+   public ConjuntoDifuso O(ConjuntoDifuso c2){
+    return Fusionar(this,c2,"Max");
+   }
 }
