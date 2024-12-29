@@ -1,0 +1,10 @@
+public class ValorNumerico{
+    protected VariableLinguistica v1;
+    protected double valor;
+
+    //constructor
+    public ValorNumerico(VariableLinguistica _v1, double _valor){
+        v1=_v1;
+        valor=_valor;
+    }
+}

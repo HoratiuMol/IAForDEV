@@ -1,0 +1,10 @@
+public class ConjuntoDifusoTrapecioDerecha extends ConjuntoDifuso{
+    //constructor
+    public ConjuntoDifusoTrapecioDerecha(double min, double max, double finPlanoElevado, double inicioPlanoBajo){
+        super(min,max);
+        Agregar (new Punto2D(min,0));
+        Agregar(new Punto2D(finPlanoElevado,0));
+        Agregar(new Punto2D(inicioPlanoBajo,1));
+        Agregar(new Punto2D(max,1));
+    }
+}

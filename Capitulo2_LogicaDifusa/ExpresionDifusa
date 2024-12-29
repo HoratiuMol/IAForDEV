@@ -1,0 +1,11 @@
+//expresamos aqui mediante la forma "variable is Valor"
+public class ExpresionDifusa{
+    protected VariableLinguistica varl;
+    protected String nombreValorLinguistico;
+
+    ///constructor
+    public ExpresionDifusa(VariableLinguistica _v1, String _valor){
+        varL=_v1;
+        nombreValorLinguistico=_valor;
+    }
+}

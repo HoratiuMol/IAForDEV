@@ -1,0 +1,38 @@
+//agreagarmos valor linguistico, borramos la lista de valores que hay y podemos usar un buscador de nobmres
+import java.util.ArrayList;
+
+public class VariableLinguistica{
+    protected String nombre;
+    protected ArrayList<ValorLinguistico> valores;
+    protected double valorMin;
+    protected double valorMax;
+
+    //constructor
+    public VariableLinguistica(String _nombre, double _min, double _max){
+        nombre=_nombre;
+        valorMin= _min;
+        valorMax= _max;
+        valores=new ArrayList();
+    }
+
+    public void AgregarValorLinguistico(ValorLinguistico v1){
+        valores.add(v1);
+    }
+
+    public void AgregarValorLinguistico(String nombre, ConjuntoDifuso conjunto){
+        valores.add(new ValorLinguistico(nombre, conjunto));
+    }
+
+    public void BorrarValores(){
+        valores.clear();
+    }
+
+    ValorLinguistico ValorLinguisticoPorNombre(String nombre){
+        for(ValorLinguistico v1: valores){
+            if(v1.nombre.equalsIgnoreCase(nombre)){
+                return v1;
+            }
+        }
+        return null;
+    }
+}

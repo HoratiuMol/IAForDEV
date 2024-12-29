@@ -1,0 +1,50 @@
+//contiein una lista de expresiones difusas como premisas (la parte previa del "THEN") 
+//y una expresion difusa como conlusion
+
+import java.util.ArrayList;
+
+//representa regla difusa con varias premisas
+//y una conclusion
+public class ReglaDifusa{
+    protected ArrayList<ExpresionDifusa> premisas;
+    protected ExpresionDifusa conclusion;
+
+    //constructor
+    public ReglaDifusa(ArrayList<ExpresionDifusa> _premisas ExpresionDifusa _conclusion){
+        premisas=_premisas;
+        conclusion=_conclusion;
+    }
+
+    //aplicar la regla a un problema numerico conreto
+    //esto produce un conjunto difuso
+    ConjuntoDifuso Aplicar(ArrayList<ValorNumerico> problema){
+        double grado=1;
+        //se busca el grado de cada premisa
+        for(ExpresionDifusa premisa:premisas){
+            double gradoLocal=0;
+            ValorLinguistico v1=null;
+            //se recupera el valor para esta premisa
+            //es el problema a resolver
+            for(ValorNumerico pb:problema){
+                if(premisa.varL.equals(pb.va)){
+                    //encontramos el dato correcto del problema,
+                    //se recuepra su pertenencia
+                    v1=
+                    premisa.varL.ValorLinguisticoPorNombre(premisa.nombreValorLinguistico);
+                    if(v1!=null){
+                        gradoLocal=v1.ValorDePertenencia(pb.valor);
+                        break;
+                    }
+                }
+            }
+            if(v1==null){
+                //nos falta al menos un dato
+                //de modo que no podemos resolver
+                return null;
+            }
+            //se guarda el dato min
+            grado=Math.min(grado, gradoLocal);
+        }
+        return conclusion.varL.ValorLinguisticoPorNombre(conclusion.nombreValorLinguistico).conjuntoDifuso.MultiplicarPor(grado);
+    }
+}

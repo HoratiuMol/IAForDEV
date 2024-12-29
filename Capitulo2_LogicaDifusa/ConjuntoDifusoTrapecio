@@ -1,0 +1,13 @@
+public class ConjuntoDifusoTrapecio extends ConjuntoDifuso{
+    //constructor
+    public ConjuntoDifusoTrapecio(double min, double max, double inicioBase, double inicioMeseta, double finMeseta, double finBase){
+        super(min,max);
+        Agregar (new Punto2D(min,0));
+        Agregar(new Punto2D(inicioBase,0));
+        Agregar(new Punto2D(inicioMeseta,1));
+        Agregar(new Punto2D(finBase,0));
+        Agregar(new Punto2D(finMeseta,1));
+        Agregar(new Punto2D(max,0));
+    }
+    //estas 4 clases simplifican la creación de los conjuntos difusos
+}

@@ -1,0 +1,16 @@
+public class ValorLinguistico{
+    //conjunto difuso asociado
+    protected ConjuntoDifuso conjuntoDifuso;
+
+    //nombre del valor
+    protected String nombre;
+
+    //constructor
+    public ValorLinguistico(String _nombre, ConjuntoDifuso _cd){
+        conjuntoDifuso=_cd;
+        nombre=_nombre;
+    }
+    double ValorDePertenencia(double valor){
+        return conjuntoDifuso.ValorDePertenencia(valor);
+    }
+}
