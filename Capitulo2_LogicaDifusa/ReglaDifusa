@@ -47,4 +47,37 @@ public class ReglaDifusa{
         }
         return conclusion.varL.ValorLinguisticoPorNombre(conclusion.nombreValorLinguistico).conjuntoDifuso.MultiplicarPor(grado);
     }
+
+    //añadimos un metodo(constructor) que descompone la regla regla difusa en premisas y conclusiones, y descompone cada 
+    //parte a continuación con funciones de manipulacion de cadenas "spliit", "toUpper" y "replaceFirst"
+    //constructor a partir de una cadena de caracteres
+    public ReglaDifusa(String reglastr, ControladorDifuso controlador){
+        //paso de la reglas en mayúsculas
+        reglastr=reglastr.toUpperCase();
+
+        //separacion de las premisas
+        String[] regla=reglastr.split(" THEN ");
+        if(regla.length==2){
+            //se trata de premisas quitando el IF
+            //y liuego separando por los AND
+            regla[0]=regla[0].repla("IF","").trim();
+            String[] premisasStr=regla[0].split(" AND ");
+            premisas= new ArrayList();
+            for(String exp:premisasStr){
+                //se divide por la palabra clave IS
+                //y se crea una expresion difusa
+                String[] partes=exp.trim().split(" IS ");
+                if(partes.length==2){
+                    ExpresionDifusa expDifusa=new 
+ExpresionDifusa(controlador.VariableLinguisticaPorNombre(partes[0]), parte[1]);
+                }
+            }
+        }
+    }
+
+    //agreagamos una regla(formato texto) a partir de una cadena de caracteres
+    public void AgregarRegla(String reglastr){
+        ReglaDifusa regla=new ReglaDifusa(reglastr, this);
+        reglas.add(regla);
+    }
 }
