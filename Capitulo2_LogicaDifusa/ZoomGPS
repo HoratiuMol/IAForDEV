@@ -1,0 +1,91 @@
+//caso practico para controlar el zoom del GPS de un coche en función de lo cerca que esté del próximo giro o devio
+public class ZoomGPS{
+    public static void main(String[] args){
+        System.out.println("\nLogica Difusa: caso del zoom de un GPS");
+        //aqui el código
+    }
+
+    //creamos el controlador difuso
+    //creacion del sistema
+    ControladorDifuso controlador=new ConjuntoDifuso("\nGestión del zoom de un GPS");
+
+    //definimos las variables linguistaicas,distancia y velocidad como enterda y zoom como salida
+    //para la distancia usaremos otros tres valor linguisticos, "Pequeña", "Media" y "Grande"
+     
+     System.out.println("\nAgreagar las variables de entrada");
+     //varialbe linguistica de entrada:
+     //distancia en metros de 0 a 500000
+     VariableLinguistica distancia=new VariableLinguistica("Distancia", 0, 500000);
+     distancia.AgregarValorLinguistico(new ValorLinguistico("Pequeña", new ConjuntoDifusoTrapecioIzquierda(0,500000, 30, 50)));
+     distancia.AgregarValorLinguistico(new ValorLinguistico("Media", new ConjuntoDifusoTrapecio(0,500000,40,50,100,150)));
+     distancia.AgregarValorLinguistico(new ValorLinguistico("Grande", new ConjuntoDifusoTrapecioDerecha(0,500000,100,150)));
+     controlador.AgregarVariableEntrada(distancia);
+
+     //realizamos el mismo proceso pero con la velocidad
+     //en km/h de 0 aa 200
+     VariableLinguistica velocidad=new VariableLinguistica("Velocidad", 0, 200);
+     velocidad.AgregarValorLinguistico(new ValorLinguistico("Lenta", new ConjuntoDifusoTrapecioIzquierda(0,200, 30, 50)));
+     velocidad.AgregarValorLinguistico(new ValorLinguistico("Media", new ConjuntoDifusoTrapecio(0,200,20,30,70,80)));
+     velocidad.AgregarValorLinguistico(new ValorLinguistico("Rapida", new ConjuntoDifusoTrapecio(0,200,70,80,90,110)));
+     velocidad.AgregarValorLinguistico(new ValorLinguistico("MuyRapida", new ConjuntoDifusoTrapecioDerecha(0,200,90,110)));
+     controlador.AgregarVariableEntrada(velocidad);
+
+     //para el zoom se definen tres valores linguistico
+     System.out.println("\nAgregar la variable de salida");
+     //nivel de zoom de 1 a 5
+     VariableLinguistica zoom=new VariableLinguistica("zoom", 0, 5);
+     zoom.AgregarValorLinguistico(new ValorLinguistico("Bajo", new ConjuntoDifusoTrapecioIzquierda(0,5, 1,2)));
+     zoom.AgregarValorLinguistico(new ValorLinguistico("Normal", new ConjuntoDifusoTrapecio(0,5,1,2,3,4)));
+     zoom.AgregarValorLinguistico(new ValorLinguistico("Grande", new ConjuntoDifusoTrapecio(0,5,3,4)));
+     controlador.AgregarVariableEntrada(zoom);
+
+     //ahora tenemos que definir las reglasç
+     System.out.println("\nAgregar las reglas");
+     //se agreaganb las distintas reglas (9 para cubrir los 12 casos)
+     controlador.AgregarRegla("IF Distancia IS Grande THEN Zoom is Bajo");
+     controlador.AgregarRegla("IF Distancia IS Pequeña AND Velocidad is Lenta THEN Zoom is Normal");
+     controlador.AgregarRegla("IF Distancia IS Pequeña AND Velocidad is Media THEN Zoom is Normal");
+     controlador.AgregarRegla("IF Distancia IS Pequeña AND Velocidad is Rapida THEN Zoom is Grande");
+     controlador.AgregarRegla("IF Distancia IS Pequeña AND Velocidad is MuyRapida THEN Zoom is Grande");
+     controlador.AgregarRegla("IF Distancia IS Media AND Velocidad is Lenta THEN Zoom is Bajo");
+     controlador.AgregarRegla("IF Distancia IS Media AND Velocidad is Media THEN Zoom is Normal");
+     controlador.AgregarRegla("IF Distancia IS Media AND Velocidad is Rapida THEN Zoom is Normal");
+     controlador.AgregarRegla("IF Distancia IS Media AND Velocidad is MuyRapida THEN Zoom is Grande");
+
+     //codificamos los casos
+     System.out.println("\nResolución de casos prácticos");
+     //caso practico 1:velocidad de 35km/h
+     //y proximo cambio de direccion a 70km/h
+     System.out.println("\nCaso 1:");
+     controlador.AgregarValorNumerico(velocidad, 35);
+     controlador.AgregarValorNumerico(distancia, 70);
+     System.out.println("\n Ressultado: " + controlador.Resolver() +"\n");
+
+     //caso practico 2 velocidad 25km/h
+     //proximo cambio de dir a 70m
+     System.out.println("\nCaso 2:");
+     controlador.AgregarValorNumerico(velocidad, 25);
+     controlador.AgregarValorNumerico(distancia, 70);
+     System.out.println("\n Ressultado: " + controlador.Resolver() +"\n");
+
+     //caso practico 3 velocidad 72.5km/h
+     //proximo cambio de dir a 40m
+     System.out.println("\nCaso 3:");
+     controlador.AgregarValorNumerico(velocidad, 72.5);
+     controlador.AgregarValorNumerico(distancia, 40);
+     System.out.println("\n Ressultado: " + controlador.Resolver() +"\n");
+
+     //caso practico 4 velocidad 100km/h
+     //proximo cambio de dir a 110m
+     System.out.println("\nCaso 4:");
+     controlador.AgregarValorNumerico(velocidad, 100);
+     controlador.AgregarValorNumerico(distancia, 110);
+     System.out.println("\n Ressultado: " + controlador.Resolver() +"\n");
+
+     //caso practico 5 velocidad 45km/h
+     //proximo cambio de dir a 160m
+     System.out.println("\nCaso 2:");
+     controlador.AgregarValorNumerico(velocidad, 45);
+     controlador.AgregarValorNumerico(distancia, 160);
+     System.out.println("\n Ressultado: " + controlador.Resolver() +"\n");
+}
